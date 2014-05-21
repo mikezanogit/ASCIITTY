@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<items>
+    <item>
+        <name>Kitty</name>
+        <data>123</data>
+    </item>
+    <item>
+        <name>Doggy</name>
+        <data>456</data>
+    </item>
+</items>

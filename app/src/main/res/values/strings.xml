@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ASCIITTY</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="buttonDelete">Delete</string>
+    <string name="buttonEdit">Edit</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
