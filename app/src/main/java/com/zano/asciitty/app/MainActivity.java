@@ -21,6 +21,14 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
     ViewFlipper viewFlipper;
     Animation   slide_in_left, slide_out_right;
 
+    public void onAsciiEditorCancel() {
+        viewFlipper.showPrevious();
+    }
+
+    public void onAsciiEditorSave() {
+        viewFlipper.showPrevious();
+    }
+
     public void onAsciiItemSelected(int index){
         viewFlipper.showNext();
     }

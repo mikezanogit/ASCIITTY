@@ -7,7 +7,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.Button;
 
 
 /**
@@ -55,10 +55,13 @@ public class AsciiEditorFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
@@ -75,6 +78,31 @@ public class AsciiEditorFragment extends Fragment {
         }
     }
 
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        final Activity activity = getActivity();
+        Button cancel = (Button) activity.findViewById(R.id.buttonCancel);
+        Button save = (Button) activity.findViewById(R.id.buttonSave);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) activity;
+                listener.onAsciiEditorCancel();
+            }
+        });
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) activity;
+                listener.onAsciiEditorSave();
+            }
+        });
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -84,6 +112,8 @@ public class AsciiEditorFragment extends Fragment {
 //            throw new ClassCastException(activity.toString()
 //                    + " must implement OnFragmentInteractionListener");
 //        }
+
+
     }
 
     @Override

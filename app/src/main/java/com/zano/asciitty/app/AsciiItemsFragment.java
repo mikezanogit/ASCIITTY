@@ -1,10 +1,13 @@
 package com.zano.asciitty.app;
 
+import android.app.Activity;
 import android.app.ListFragment;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -62,6 +65,8 @@ public class AsciiItemsFragment extends ListFragment {
         } catch (IOException e) {
 
         }
+
+
     }
 
     private ArrayList<Item> parseXML(XmlResourceParser parser) throws XmlPullParserException, IOException

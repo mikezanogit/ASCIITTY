@@ -4,8 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.zano.asciitty.app.MainActivity"
- >
+    tools:context="com.zano.asciitty.app.MainActivity">
 
     <ViewFlipper
         android:layout_width="fill_parent"

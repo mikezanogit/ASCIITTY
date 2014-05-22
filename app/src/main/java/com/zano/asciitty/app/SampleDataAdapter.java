@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -36,6 +37,16 @@ public class SampleDataAdapter extends ArrayAdapter<Item> {
             TextView itemView = (TextView) view.findViewById(R.id.textViewAsciiName);
             itemView.setText(item.name);
         }
+
+
+        Button edit = (Button) view.findViewById(R.id.buttonEdit);
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) view.getContext();
+                listener.onAsciiItemSelected(0);
+            }
+        });
 
         return view;
     }

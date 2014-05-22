@@ -5,4 +5,6 @@ package com.zano.asciitty.app;
  */
 public interface OnAsciiItemSelectionListener {
     public void onAsciiItemSelected(int index);
+    public void onAsciiEditorCancel();
+    public void onAsciiEditorSave();
 }
