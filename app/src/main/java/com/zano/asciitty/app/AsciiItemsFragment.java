@@ -18,12 +18,21 @@ import java.util.ArrayList;
  * Created by mamanzan on 5/21/2014.
  */
 public class AsciiItemsFragment extends ListFragment {
+
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
 
         OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) getActivity();
         listener.onAsciiItemSelected(position);
-        super.onListItemClick(l, v, position, id);
+        //super.onListItemClick(l, v, position, id);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+
+        //Button edit = view.findViewById(R.id.buttonEdit);
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override

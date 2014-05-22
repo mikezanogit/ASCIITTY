@@ -10,14 +10,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
-
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ViewFlipper;
 
 
 public class MainActivity extends Activity implements OnAsciiItemSelectionListener {
 
 
-    public void onAsciiItemSelected(int index){
+    ViewFlipper viewFlipper;
+    Animation   slide_in_left, slide_out_right;
 
+    public void onAsciiItemSelected(int index){
+        viewFlipper.showNext();
     }
 
     @Override
@@ -29,6 +34,15 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+        viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipper);
+        slide_in_left = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
+        slide_out_right = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
+
+        viewFlipper.setInAnimation(slide_in_left);
+        viewFlipper.setOutAnimation(slide_out_right);
+
+
     }
 
 

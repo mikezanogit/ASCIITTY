@@ -13,14 +13,14 @@
         android:id="@+id/viewFlipper" >
 
         <fragment
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:name="com.zano.asciitty.app.AsciiItemsFragment"
             android:id="@+id/fragmentAsciiItems" />
 
         <fragment
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
             android:name="com.zano.asciitty.app.AsciiEditorFragment"
             android:id="@+id/fragmentAsciiEditor" />
     </ViewFlipper>
