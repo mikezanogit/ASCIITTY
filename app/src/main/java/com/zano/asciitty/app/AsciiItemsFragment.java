@@ -85,10 +85,12 @@ public class AsciiItemsFragment extends ListFragment {
                     nodeName = parser.getName();
                     if (nodeName.equals("item")) {
                         currentProduct = new Item();
+                        int id = Integer.parseInt(parser.getAttributeValue(null, "id"));
                         parser.next();
                         String name = parser.nextText();
                         parser.next();
                         String data = parser.nextText();
+                        currentProduct.id = id;
                         currentProduct.name = name;
                         currentProduct.data = data;
                     }

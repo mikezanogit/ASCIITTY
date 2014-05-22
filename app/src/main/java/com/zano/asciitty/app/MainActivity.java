@@ -20,6 +20,7 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
 
     ViewFlipper viewFlipper;
     Animation   slide_in_left, slide_out_right;
+    public Item mCurrentItem;
 
     public void onAsciiEditorCancel() {
         viewFlipper.showPrevious();
@@ -29,7 +30,8 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
         viewFlipper.showPrevious();
     }
 
-    public void onAsciiItemSelected(int index){
+    public void onAsciiItemSelected(Item item){
+        mCurrentItem = item;
         viewFlipper.showNext();
     }
 
@@ -37,11 +39,11 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
-        }
+//        if (savedInstanceState == null) {
+//            getFragmentManager().beginTransaction()
+//                    .add(R.id.container, new PlaceholderFragment())
+//                    .commit();
+//        }
 
         viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipper);
         slide_in_left = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
@@ -76,16 +78,16 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-    }
+//    public static class PlaceholderFragment extends Fragment {
+//
+//        public PlaceholderFragment() {
+//        }
+//
+//        @Override
+//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                Bundle savedInstanceState) {
+//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+//            return rootView;
+//        }
+//    }
 }

@@ -7,7 +7,7 @@
     <string name="buttonDelete">Delete</string>
     <string name="buttonEdit">Edit</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="textViewEditTitle">Editing</string>
+    <string name="textViewEditTitle">Edit your creation</string>
     <string name="buttonCancel">Cancel</string>
     <string name="buttonSave">Save</string>
 

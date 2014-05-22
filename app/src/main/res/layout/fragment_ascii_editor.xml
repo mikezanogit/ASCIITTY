@@ -18,7 +18,12 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/editText"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:background="#eee"
+        android:clickable="true"
+        android:text="cat"
+        android:textColor="#000"
+        android:gravity="top" />
 
     <LinearLayout
         android:orientation="horizontal"

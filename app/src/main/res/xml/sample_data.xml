@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <items>
-    <item>
+    <item id="1">
         <name>Kitty</name>
-        <data>123</data>
+        <data>&#60;</data>
     </item>
-    <item>
+    <item id="2">
         <name>Doggy</name>
         <data>456</data>
     </item>
-    <item>
+    <item id="3">
         <name>Froggy</name>
         <data>789</data>
     </item>
-    <item>
+    <item id="4">
         <name>Piggy</name>
         <data>012</data>
     </item>
-    <item>
+    <item id="5">
         <name>Birdy</name>
         <data>345</data>
     </item>
-    <item>
+    <item id="6">
         <name>Foxy</name>
         <data>678</data>
     </item>
-    <item>
+    <item id="7">
         <name>Racoony</name>
         <data>901</data>
     </item>

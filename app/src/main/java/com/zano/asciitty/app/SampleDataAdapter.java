@@ -32,7 +32,7 @@ public class SampleDataAdapter extends ArrayAdapter<Item> {
             view = inflater.inflate(R.layout.fragment_ascii_items, parent, false);
         }
 
-        Item item  = this.getItem(position);
+        final Item item  = this.getItem(position);
         if(item != null){
             TextView itemView = (TextView) view.findViewById(R.id.textViewAsciiName);
             itemView.setText(item.name);
@@ -44,7 +44,7 @@ public class SampleDataAdapter extends ArrayAdapter<Item> {
             @Override
             public void onClick(View view) {
                 OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) view.getContext();
-                listener.onAsciiItemSelected(0);
+                listener.onAsciiItemSelected(item);
             }
         });
 
