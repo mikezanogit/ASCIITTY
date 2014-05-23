@@ -20,14 +20,28 @@ import java.util.ArrayList;
 /**
  * Created by mamanzan on 5/21/2014.
  */
-public class AsciiItemsFragment extends ListFragment {
+public class AsciiItemsFragment extends ListFragment implements SampleDataAdapterListener {
+
+    public void OnItemClick(View view, final Item item){
+
+        Button edit = (Button) view.findViewById(R.id.buttonEdit);
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) view.getContext();
+                listener.onAsciiItemSelected(item);
+
+            }
+        });
+
+    }
 
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
 
         OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) getActivity();
-        listener.onAsciiItemSelected(position);
+        //listener.onAsciiItemSelected(position);
         //super.onListItemClick(l, v, position, id);
     }
 
@@ -57,6 +71,7 @@ public class AsciiItemsFragment extends ListFragment {
 
             ArrayList<Item> items = parseXML(xrp);
             SampleDataAdapter sampleData = new SampleDataAdapter(getActivity(), R.layout.fragment_ascii_items, items);
+            sampleData.setmListener(this);
             setListAdapter(sampleData);
 
             //shorthand supported on higher level of Java is catch (EX1 | EX2 e)
