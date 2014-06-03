@@ -3,11 +3,16 @@
 <items>
     <item id="1">
         <name>Kitty</name>
-        <data>&#60;</data>
+        <data>&#62;&#94;..&#94;&#60;</data>
     </item>
     <item id="2">
         <name>Doggy</name>
-        <data>456</data>
+        <data>
+        /\_/\
+   ____/ o o \
+ /~____  =&#248;= /
+(______)__m_m)
+        </data>
     </item>
     <item id="3">
         <name>Froggy</name>

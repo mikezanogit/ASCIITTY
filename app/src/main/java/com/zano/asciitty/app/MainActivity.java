@@ -31,7 +31,18 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
     }
 
     public void onAsciiItemSelected(Item item){
+
+
         mCurrentItem = item;
+       
+
+        AsciiEditorFragment editor = (AsciiEditorFragment)
+                this.getFragmentManager().findFragmentById(R.id.fragmentAsciiEditor);
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(AsciiEditorFragment.ITEM, item);
+        editor.setEditor(bundle);
+
         viewFlipper.showNext();
     }
 

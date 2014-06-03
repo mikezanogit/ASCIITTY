@@ -20,6 +20,7 @@
         android:id="@+id/editText"
         android:layout_weight="1"
         android:background="#eee"
+        android:typeface="monospace"
         android:clickable="true"
         android:text="cat"
         android:textColor="#000"

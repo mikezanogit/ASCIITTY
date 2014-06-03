@@ -1,6 +1,7 @@
 package com.zano.asciitty.app;
 
 import android.app.Activity;
+import android.content.res.XmlResourceParser;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -8,6 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
+
+import java.io.File;
+import java.io.InputStream;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 
 /**
@@ -24,11 +32,13 @@ public class AsciiEditorFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private static final String ITEM = "item";
+    public static final String ITEM = "item";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private Item item;
 
     private OnFragmentInteractionListener mListener;
 
@@ -80,10 +90,18 @@ public class AsciiEditorFragment extends Fragment {
     }
 
 
+    public void setEditor(Bundle args) {
+        this.item = args.getParcelable(AsciiEditorFragment.ITEM);
+        Activity activity = this.getActivity();
+        TextView textView = (TextView) activity.findViewById(R.id.editText);
+        textView.setText(this.item.data);
+    }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         final Activity activity = getActivity();
+        final Item transportItem = this.item;
         Button cancel = (Button) activity.findViewById(R.id.buttonCancel);
         Button save = (Button) activity.findViewById(R.id.buttonSave);
 
@@ -98,6 +116,18 @@ public class AsciiEditorFragment extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                TextView textView = (TextView) activity.findViewById(R.id.editText);
+                transportItem.data = textView.getText().toString();
+
+                //String sample_datja = getResources().getString(R.xml.sample_data);
+                XmlResourceParser xrp = getResources().getXml(R.xml.sample_data);
+
+                //InputStream sample_data = getResources().openRawResource(R.xml.sample_data);
+                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                //DocumentBuilder dBuilder = dbFactory.newDocumentBuilder().parse();
+                //Document doc = dBuilder.parse
+
                 OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) activity;
                 listener.onAsciiEditorSave();
             }

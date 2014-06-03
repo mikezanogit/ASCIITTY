@@ -22,6 +22,8 @@ import java.util.ArrayList;
  */
 public class AsciiItemsFragment extends ListFragment implements SampleDataAdapterListener {
 
+
+
     public void OnItemClick(View view, final Item item){
 
         Button edit = (Button) view.findViewById(R.id.buttonEdit);
@@ -30,6 +32,8 @@ public class AsciiItemsFragment extends ListFragment implements SampleDataAdapte
             public void onClick(View view) {
                 OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) view.getContext();
                 listener.onAsciiItemSelected(item);
+
+
 
             }
         });
