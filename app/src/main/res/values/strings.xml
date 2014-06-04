@@ -10,5 +10,6 @@
     <string name="textViewEditTitle">Edit your creation</string>
     <string name="buttonCancel">Cancel</string>
     <string name="buttonSave">Save</string>
+    <string name="buttonAdd">Add New</string>
 
 </resources>

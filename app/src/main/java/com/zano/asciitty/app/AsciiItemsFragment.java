@@ -78,6 +78,7 @@ public class AsciiItemsFragment extends ListFragment implements SampleDataAdapte
             sampleData.setmListener(this);
             setListAdapter(sampleData);
 
+
             //shorthand supported on higher level of Java is catch (EX1 | EX2 e)
         } catch (XmlPullParserException e) {
 

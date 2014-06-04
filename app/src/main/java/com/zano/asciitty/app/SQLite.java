@@ -29,7 +29,7 @@ public class SQLite extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
+        sqLiteDatabase.execSQL(DATABASE_CREATE);
     }
 
     @Override
