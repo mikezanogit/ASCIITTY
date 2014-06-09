@@ -14,7 +14,7 @@
         <fragment
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:name="com.zano.asciitty.app.AsciiItemsFragment"
+            android:name="com.zano.asciitty.app.AsciiItemsFragment_"
             android:id="@+id/fragmentAsciiItems" />
 
         <fragment

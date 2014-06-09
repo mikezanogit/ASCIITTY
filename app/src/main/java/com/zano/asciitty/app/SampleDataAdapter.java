@@ -46,7 +46,7 @@ public class SampleDataAdapter extends ArrayAdapter<Item> {
         if (view == null) {
             ///LayoutInflater inflater = ( LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-            view = inflater.inflate(R.layout.fragment_ascii_items, parent, false);
+            view = inflater.inflate(R.layout.fragment_ascii_item, parent, false);
         }
 
         final Item item  = this.getItem(position);

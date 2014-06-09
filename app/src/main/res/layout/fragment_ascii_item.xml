@@ -33,11 +33,7 @@
             android:layout_weight="0" />
     </LinearLayout>
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/buttonAdd"
-        android:id="@+id/buttonAdd" />
+
 
 </LinearLayout>
 

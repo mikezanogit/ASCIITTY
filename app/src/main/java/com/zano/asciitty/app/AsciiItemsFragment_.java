@@ -1,12 +1,12 @@
 package com.zano.asciitty.app;
 
-import android.app.Activity;
-import android.app.ListFragment;
-import android.content.DialogInterface;
+import android.app.Fragment;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -14,18 +14,57 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-
 import java.util.ArrayList;
 
 /**
- * Created by mamanzan on 5/21/2014.
+ * Created by mamanzan on 6/9/2014.
  */
-public class AsciiItemsFragment extends ListFragment implements SampleDataAdapterListener {
-
+public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterListener{
 
     private ListView lv;
 
-    public void OnItemClick(View view, final Item item){
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_ascii_items, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+
+        super.onActivityCreated(savedInstanceState);
+
+        this.lv = (ListView) this.getActivity().findViewById(R.id.listView);
+        try {
+            Resources res = getResources();
+            XmlResourceParser xrp = res.getXml(R.xml.sample_data);
+
+
+
+            ArrayList<Item> items = parseXML(xrp);
+            SampleDataAdapter sampleData = new SampleDataAdapter(getActivity(), R.layout.fragment_ascii_item, items);
+            sampleData.setmListener(this);
+            lv.setAdapter(sampleData);
+
+
+
+            //shorthand supported on higher level of Java is catch (EX1 | EX2 e)
+        } catch (XmlPullParserException e) {
+
+        } catch (IOException e) {
+
+        }
+    }
+
+    @Override
+    public void OnItemClick(View view, final Item item) {
 
         Button edit = (Button) view.findViewById(R.id.buttonEdit);
         edit.setOnClickListener(new View.OnClickListener() {
@@ -36,55 +75,6 @@ public class AsciiItemsFragment extends ListFragment implements SampleDataAdapte
 
             }
         });
-    }
-
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-
-        OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) getActivity();
-        //listener.onAsciiItemSelected(position);
-        //super.onListItemClick(l, v, position, id);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-
-        //Button edit = view.findViewById(R.id.buttonEdit);
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState)  {
-
-
-        super.onActivityCreated(savedInstanceState);
-
-        //XmlPullParserFactory parserFactory;
-        try {
-            Resources res = getResources();
-            XmlResourceParser xrp = res.getXml(R.xml.sample_data);
-
-//          parserFactory = XmlPullParserFactory.newInstance();
-//          XmlPullParser parser = parserFactory.newPullParser();
-//          InputStream in_s = getApplicationContext().getAssets().open("temp.xml");
-//          parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-//          parser.setInput(in_s, null);
-
-            ArrayList<Item> items = parseXML(xrp);
-            SampleDataAdapter sampleData = new SampleDataAdapter(getActivity(), R.layout.fragment_ascii_items, items);
-            sampleData.setmListener(this);
-            setListAdapter(sampleData);
-
-
-            //shorthand supported on higher level of Java is catch (EX1 | EX2 e)
-        } catch (XmlPullParserException e) {
-
-        } catch (IOException e) {
-
-        }
-
-
     }
 
     private ArrayList<Item> parseXML(XmlResourceParser parser) throws XmlPullParserException, IOException
