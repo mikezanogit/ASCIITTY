@@ -14,7 +14,9 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mamanzan on 6/9/2014.
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterListener{
 
     private ListView lv;
+    private AsciiArtDataSource dataSource;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,15 @@ public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterLi
             sampleData.setmListener(this);
             lv.setAdapter(sampleData);
 
+            this.dataSource = new AsciiArtDataSource(this.getActivity());
+            try {
+                this.dataSource.open();
+                List<AsciiArtItem> values = this.dataSource.getAllAsciiArtItems();
+                this.dataSource.close();
+            }
+            catch(SQLException e) {
+
+            }
 
 
             //shorthand supported on higher level of Java is catch (EX1 | EX2 e)

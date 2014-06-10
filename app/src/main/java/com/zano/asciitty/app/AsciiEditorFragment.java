@@ -39,6 +39,7 @@ public class AsciiEditorFragment extends Fragment {
     private String mParam2;
 
     private Item item;
+    private  AsciiArtItem asciiItem;
 
     private OnFragmentInteractionListener mListener;
 
@@ -95,6 +96,11 @@ public class AsciiEditorFragment extends Fragment {
         Activity activity = this.getActivity();
         TextView textView = (TextView) activity.findViewById(R.id.editText);
         textView.setText(this.item.data);
+
+        this.asciiItem = new AsciiArtItem();
+        this.asciiItem.setId(this.item.id);
+        this.asciiItem.setData(this.item.data);
+        this.asciiItem.setName(this.item.name);
     }
 
     @Override
@@ -102,12 +108,15 @@ public class AsciiEditorFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         final Activity activity = getActivity();
         final Item transportItem = this.item;
+        final AsciiArtItem asciiTransportItem = this.asciiItem;
         Button cancel = (Button) activity.findViewById(R.id.buttonCancel);
         Button save = (Button) activity.findViewById(R.id.buttonSave);
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                
                 OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) activity;
                 listener.onAsciiEditorCancel();
             }
@@ -129,7 +138,7 @@ public class AsciiEditorFragment extends Fragment {
                 //Document doc = dBuilder.parse
 
                 OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) activity;
-                listener.onAsciiEditorSave();
+                listener.onAsciiEditorSave(asciiTransportItem);
             }
         });
     }

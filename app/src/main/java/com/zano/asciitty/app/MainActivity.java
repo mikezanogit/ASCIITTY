@@ -14,6 +14,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ViewFlipper;
 
+import java.sql.SQLException;
+
 
 public class MainActivity extends Activity implements OnAsciiItemSelectionListener {
 
@@ -21,13 +23,24 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
     ViewFlipper viewFlipper;
     Animation   slide_in_left, slide_out_right;
     public Item mCurrentItem;
+    public AsciiArtDataSource dataSource;
 
     public void onAsciiEditorCancel() {
         viewFlipper.showPrevious();
     }
 
-    public void onAsciiEditorSave() {
+    public void onAsciiEditorSave(AsciiArtItem item)
+    {
         viewFlipper.showPrevious();
+
+        this.dataSource = new AsciiArtDataSource(this);
+        try {
+            this.dataSource.open();
+            this.dataSource.createAsciiArtItem(item.getName(), item.getData());
+            this.dataSource.close();
+        } catch (SQLException e) {
+        }
+
     }
 
     public void onAsciiItemSelected(Item item){
