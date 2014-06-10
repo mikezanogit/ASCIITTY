@@ -14,6 +14,15 @@
 
     <EditText
         android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextName"
+        android:background="#eee"
+        android:layout_marginBottom="6dp"
+        android:text="@string/editTextDefaultName"
+        android:textColor="#000" />
+
+    <EditText
+        android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:inputType="textMultiLine"
         android:ems="10"
@@ -22,9 +31,10 @@
         android:background="#eee"
         android:typeface="monospace"
         android:clickable="true"
-        android:text="cat"
+        android:text="@string/editTextDefaultCreation"
         android:textColor="#000"
-        android:gravity="top" />
+        android:gravity="top"
+        android:singleLine="false" />
 
     <LinearLayout
         android:orientation="horizontal"

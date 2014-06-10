@@ -25,7 +25,7 @@ public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterLi
 
     private ListView lv;
     private AsciiArtDataSource dataSource;
-
+    private SampleDataAdapter sampleData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,10 @@ public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterLi
 
 
 
+    }
+
+    public void update(AsciiArtItem item) {
+        this.sampleData.add(item);
     }
 
     @Override
@@ -64,7 +68,7 @@ public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterLi
 
             }
 
-            SampleDataAdapter sampleData = new SampleDataAdapter(getActivity(), R.layout.fragment_ascii_item, (ArrayList<AsciiArtItem>) values);
+            this.sampleData = new SampleDataAdapter(getActivity(), R.layout.fragment_ascii_item, (ArrayList<AsciiArtItem>) values);
             sampleData.setmListener(this);
             lv.setAdapter(sampleData);
 

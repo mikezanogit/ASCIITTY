@@ -45,22 +45,30 @@ public class AsciiArtDataSource {
         return newItem;
     }
 
-    public void updateAsciiArtItem(AsciiArtItem item){
+    public AsciiArtItem updateAsciiArtItem(AsciiArtItem item){
         ContentValues values = new ContentValues();
         values.put(SQLite.COLUMN_NAME, item.getName());
         values.put(SQLite.COLUMN_DATA, item.getData());
         long id = item.getId();
 
         try {
+//            this.db.update(
+//                    SQLite.TABLE_ASCII_ART,
+//                    values,
+//                    SQLite.COLUMN_ID + " = ?",
+//                    new String[]{String.valueOf(id)});
+
             this.db.update(
                     SQLite.TABLE_ASCII_ART,
                     values,
-                    SQLite.COLUMN_ID + " = ?",
-                    new String[]{String.valueOf(id)});
+                    SQLite.COLUMN_ID +  "= " + id,
+                    null);
 
         } catch (Exception e) {
             Log.e("SQL problem", e.getMessage());
         }
+
+        return item;
     }
 
     public void deleteAsciiArtItem(AsciiArtItem item) {

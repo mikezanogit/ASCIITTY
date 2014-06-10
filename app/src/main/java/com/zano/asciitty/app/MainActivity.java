@@ -31,22 +31,31 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
 
     public void onAsciiEditorSave(AsciiArtItem item)
     {
-        viewFlipper.showPrevious();
+
 
         this.dataSource = new AsciiArtDataSource(this);
         try {
             this.dataSource.open();
-            if (item != null) {
+            if (item.getId() != 0) {
                 this.dataSource.updateAsciiArtItem(item);
             }
             else{
-                this.dataSource.createAsciiArtItem(item.getName(), item.getData());
+                item = this.dataSource.createAsciiArtItem(item.getName(), item.getData());
             }
 
             this.dataSource.close();
+
+            AsciiItemsFragment_ items = (AsciiItemsFragment_)
+                    this.getFragmentManager().findFragmentById(R.id.fragmentAsciiItems);
+
+            items.update(item);
+
         } catch (SQLException e) {
         }
 
+
+
+        viewFlipper.showPrevious();
     }
 
 

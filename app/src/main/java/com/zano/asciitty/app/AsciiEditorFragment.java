@@ -55,11 +55,14 @@ public class AsciiEditorFragment extends Fragment {
         this.asciiItem = args.getParcelable(AsciiEditorFragment.ITEM);
         Activity activity = this.getActivity();
         TextView textView = (TextView) activity.findViewById(R.id.editText);
+        TextView textViewName = (TextView) activity.findViewById(R.id.editTextName);
         if (this.asciiItem != null) {
             textView.setText(this.asciiItem.getData());
+            textViewName.setText(this.asciiItem.getName());
         }
         else{
-            textView.setText("");
+            textViewName.setText(R.string.editTextDefaultName);
+            textView.setText(R.string.editTextDefaultCreation);
         }
     }
 
@@ -87,7 +90,21 @@ public class AsciiEditorFragment extends Fragment {
     }
 
     public void SaveAsciiItem() {
-        OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) this.getActivity();
+        Activity main = this.getActivity();
+
+        TextView tvData = (TextView) main.findViewById(R.id.editText);
+        TextView tvName = (TextView) main.findViewById(R.id.editTextName);
+
+        if(this.asciiItem == null){
+            this.asciiItem = new AsciiArtItem();
+            this.asciiItem.setId(0);
+        }
+        //Do this to update
+        this.asciiItem.setName(tvName.getText().toString());
+        this.asciiItem.setData(tvData.getText().toString());
+
+
+        OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) main;
         listener.onAsciiEditorSave(this.asciiItem);
     }
 

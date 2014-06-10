@@ -11,5 +11,7 @@
     <string name="buttonCancel">Cancel</string>
     <string name="buttonSave">Save</string>
     <string name="buttonAdd">Add New</string>
+    <string name="editTextDefaultName">Enter a name</string>
+    <string name="editTextDefaultCreation">Create your masterpiece here</string>
 
 </resources>
