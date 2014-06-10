@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -42,6 +43,24 @@ public class AsciiArtDataSource {
         AsciiArtItem newItem = this.cursorToAsciiArtItem(cursor);
         cursor.close();
         return newItem;
+    }
+
+    public void updateAsciiArtItem(AsciiArtItem item){
+        ContentValues values = new ContentValues();
+        values.put(SQLite.COLUMN_NAME, item.getName());
+        values.put(SQLite.COLUMN_DATA, item.getData());
+        long id = item.getId();
+
+        try {
+            this.db.update(
+                    SQLite.TABLE_ASCII_ART,
+                    values,
+                    SQLite.COLUMN_ID + " = ?",
+                    new String[]{String.valueOf(id)});
+
+        } catch (Exception e) {
+            Log.e("SQL problem", e.getMessage());
+        }
     }
 
     public void deleteAsciiArtItem(AsciiArtItem item) {

@@ -25,7 +25,7 @@ public class AsciiItemsFragment extends ListFragment implements SampleDataAdapte
 
     private ListView lv;
 
-    public void OnItemClick(View view, final Item item){
+    public void OnItemClick(View view, final AsciiArtItem item){
 
         Button edit = (Button) view.findViewById(R.id.buttonEdit);
         edit.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +71,7 @@ public class AsciiItemsFragment extends ListFragment implements SampleDataAdapte
 //          parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
 //          parser.setInput(in_s, null);
 
-            ArrayList<Item> items = parseXML(xrp);
+            ArrayList<AsciiArtItem> items = parseXML(xrp);
             SampleDataAdapter sampleData = new SampleDataAdapter(getActivity(), R.layout.fragment_ascii_items, items);
             sampleData.setmListener(this);
             setListAdapter(sampleData);
@@ -87,11 +87,11 @@ public class AsciiItemsFragment extends ListFragment implements SampleDataAdapte
 
     }
 
-    private ArrayList<Item> parseXML(XmlResourceParser parser) throws XmlPullParserException, IOException
+    private ArrayList<AsciiArtItem> parseXML(XmlResourceParser parser) throws XmlPullParserException, IOException
     {
-        ArrayList<Item> products = null;
+        ArrayList<AsciiArtItem> products = null;
         int eventType = parser.getEventType();
-        Item currentProduct = null;
+        AsciiArtItem currentProduct = null;
 
         while (eventType != XmlPullParser.END_DOCUMENT){
             String nodeName = null;
@@ -102,15 +102,15 @@ public class AsciiItemsFragment extends ListFragment implements SampleDataAdapte
                 case XmlPullParser.START_TAG:
                     nodeName = parser.getName();
                     if (nodeName.equals("item")) {
-                        currentProduct = new Item();
+                        currentProduct = new AsciiArtItem();
                         int id = Integer.parseInt(parser.getAttributeValue(null, "id"));
                         parser.next();
                         String name = parser.nextText();
                         parser.next();
                         String data = parser.nextText();
-                        currentProduct.id = id;
-                        currentProduct.name = name;
-                        currentProduct.data = data;
+                        currentProduct.setId(id);
+                        currentProduct.setName(name);
+                        currentProduct.setData(data);
                     }
 //                    if (name == "product"){
 //                        currentProduct = new Item();

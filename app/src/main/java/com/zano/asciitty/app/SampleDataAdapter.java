@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 
 
-public class SampleDataAdapter extends ArrayAdapter<Item> {
+public class SampleDataAdapter extends ArrayAdapter<AsciiArtItem> {
     private Context context;
 
     public SampleDataAdapterListener getmListener() {
@@ -30,7 +30,7 @@ public class SampleDataAdapter extends ArrayAdapter<Item> {
     private SampleDataAdapterListener mListener;
 
 
-    public SampleDataAdapter(Context context, int layoutId, ArrayList<Item> items){
+    public SampleDataAdapter(Context context, int layoutId, ArrayList<AsciiArtItem> items){
 
 
         super(context,layoutId,items);
@@ -49,10 +49,10 @@ public class SampleDataAdapter extends ArrayAdapter<Item> {
             view = inflater.inflate(R.layout.fragment_ascii_item, parent, false);
         }
 
-        final Item item  = this.getItem(position);
+        final AsciiArtItem item  = this.getItem(position);
         if(item != null){
             TextView itemView = (TextView) view.findViewById(R.id.textViewAsciiName);
-            itemView.setText(item.name);
+            itemView.setText(item.getName());
         }
 
         mListener.OnItemClick(view, item);

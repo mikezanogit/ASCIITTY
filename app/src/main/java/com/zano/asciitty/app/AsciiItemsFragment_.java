@@ -26,6 +26,7 @@ public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterLi
     private ListView lv;
     private AsciiArtDataSource dataSource;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,23 +50,23 @@ public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterLi
             Resources res = getResources();
             XmlResourceParser xrp = res.getXml(R.xml.sample_data);
 
-
-
-            ArrayList<Item> items = parseXML(xrp);
-            SampleDataAdapter sampleData = new SampleDataAdapter(getActivity(), R.layout.fragment_ascii_item, items);
-            sampleData.setmListener(this);
-            lv.setAdapter(sampleData);
+            ArrayList<AsciiArtItem> items = parseXML(xrp);
+            List<AsciiArtItem> values = null;
 
             this.dataSource = new AsciiArtDataSource(this.getActivity());
             try {
                 this.dataSource.open();
-                List<AsciiArtItem> values = this.dataSource.getAllAsciiArtItems();
+                values = this.dataSource.getAllAsciiArtItems();
+
                 this.dataSource.close();
             }
             catch(SQLException e) {
 
             }
 
+            SampleDataAdapter sampleData = new SampleDataAdapter(getActivity(), R.layout.fragment_ascii_item, (ArrayList<AsciiArtItem>) values);
+            sampleData.setmListener(this);
+            lv.setAdapter(sampleData);
 
             //shorthand supported on higher level of Java is catch (EX1 | EX2 e)
         } catch (XmlPullParserException e) {
@@ -73,10 +74,26 @@ public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterLi
         } catch (IOException e) {
 
         }
+
+
+
+
+        Button add = (Button) this.getActivity().findViewById(R.id.buttonAdd);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) view.getContext();
+                listener.onAsciiCreateNewItem();
+            }
+        });
+    }
+
+    public void CreateNewAsciiItem() {
+
     }
 
     @Override
-    public void OnItemClick(View view, final Item item) {
+    public void OnItemClick(View view, final AsciiArtItem item) {
 
         Button edit = (Button) view.findViewById(R.id.buttonEdit);
         edit.setOnClickListener(new View.OnClickListener() {
@@ -89,11 +106,11 @@ public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterLi
         });
     }
 
-    private ArrayList<Item> parseXML(XmlResourceParser parser) throws XmlPullParserException, IOException
+    private ArrayList<AsciiArtItem> parseXML(XmlResourceParser parser) throws XmlPullParserException, IOException
     {
-        ArrayList<Item> products = null;
+        ArrayList<AsciiArtItem> products = null;
         int eventType = parser.getEventType();
-        Item currentProduct = null;
+        AsciiArtItem currentProduct = null;
 
         while (eventType != XmlPullParser.END_DOCUMENT){
             String nodeName = null;
@@ -104,15 +121,15 @@ public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterLi
                 case XmlPullParser.START_TAG:
                     nodeName = parser.getName();
                     if (nodeName.equals("item")) {
-                        currentProduct = new Item();
+                        currentProduct = new AsciiArtItem();
                         int id = Integer.parseInt(parser.getAttributeValue(null, "id"));
                         parser.next();
                         String name = parser.nextText();
                         parser.next();
                         String data = parser.nextText();
-                        currentProduct.id = id;
-                        currentProduct.name = name;
-                        currentProduct.data = data;
+                        currentProduct.setId(id);
+                        currentProduct.setName(name);
+                        currentProduct.setData(data);
                     }
 //                    if (name == "product"){
 //                        currentProduct = new Item();

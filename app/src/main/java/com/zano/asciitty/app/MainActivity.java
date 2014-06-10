@@ -22,7 +22,7 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
 
     ViewFlipper viewFlipper;
     Animation   slide_in_left, slide_out_right;
-    public Item mCurrentItem;
+    public AsciiArtItem mCurrentItem;
     public AsciiArtDataSource dataSource;
 
     public void onAsciiEditorCancel() {
@@ -36,19 +36,21 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
         this.dataSource = new AsciiArtDataSource(this);
         try {
             this.dataSource.open();
-            this.dataSource.createAsciiArtItem(item.getName(), item.getData());
+            if (item != null) {
+                this.dataSource.updateAsciiArtItem(item);
+            }
+            else{
+                this.dataSource.createAsciiArtItem(item.getName(), item.getData());
+            }
+
             this.dataSource.close();
         } catch (SQLException e) {
         }
 
     }
 
-    public void onAsciiItemSelected(Item item){
 
-
-        mCurrentItem = item;
-       
-
+    public void ShowEditor(AsciiArtItem item) {
         AsciiEditorFragment editor = (AsciiEditorFragment)
                 this.getFragmentManager().findFragmentById(R.id.fragmentAsciiEditor);
 
@@ -57,6 +59,17 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
         editor.setEditor(bundle);
 
         viewFlipper.showNext();
+    }
+
+    @Override
+    public void onAsciiCreateNewItem() {
+        this.ShowEditor(null);
+    }
+
+    @Override
+    public void onAsciiItemSelected(AsciiArtItem item){
+        mCurrentItem = item;
+        this.ShowEditor(mCurrentItem);
     }
 
     @Override

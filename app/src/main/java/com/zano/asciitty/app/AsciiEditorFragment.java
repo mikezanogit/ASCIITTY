@@ -30,50 +30,18 @@ import javax.xml.parsers.DocumentBuilderFactory;
 public class AsciiEditorFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
     public static final String ITEM = "item";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    private Item item;
     private  AsciiArtItem asciiItem;
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AsciiEditor.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static AsciiEditorFragment newInstance(String param1, String param2) {
-        AsciiEditorFragment fragment = new AsciiEditorFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-    public AsciiEditorFragment() {
-        // Required empty public constructor
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-
     }
 
     @Override
@@ -83,40 +51,28 @@ public class AsciiEditorFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_ascii_editor, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-
     public void setEditor(Bundle args) {
-        this.item = args.getParcelable(AsciiEditorFragment.ITEM);
+        this.asciiItem = args.getParcelable(AsciiEditorFragment.ITEM);
         Activity activity = this.getActivity();
         TextView textView = (TextView) activity.findViewById(R.id.editText);
-        textView.setText(this.item.data);
-
-        this.asciiItem = new AsciiArtItem();
-        this.asciiItem.setId(this.item.id);
-        this.asciiItem.setData(this.item.data);
-        this.asciiItem.setName(this.item.name);
+        if (this.asciiItem != null) {
+            textView.setText(this.asciiItem.getData());
+        }
+        else{
+            textView.setText("");
+        }
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         final Activity activity = getActivity();
-        final Item transportItem = this.item;
-        final AsciiArtItem asciiTransportItem = this.asciiItem;
         Button cancel = (Button) activity.findViewById(R.id.buttonCancel);
         Button save = (Button) activity.findViewById(R.id.buttonSave);
 
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                
                 OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) activity;
                 listener.onAsciiEditorCancel();
             }
@@ -125,35 +81,19 @@ public class AsciiEditorFragment extends Fragment {
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                TextView textView = (TextView) activity.findViewById(R.id.editText);
-                transportItem.data = textView.getText().toString();
-
-                //String sample_datja = getResources().getString(R.xml.sample_data);
-                XmlResourceParser xrp = getResources().getXml(R.xml.sample_data);
-
-                //InputStream sample_data = getResources().openRawResource(R.xml.sample_data);
-                DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-                //DocumentBuilder dBuilder = dbFactory.newDocumentBuilder().parse();
-                //Document doc = dBuilder.parse
-
-                OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) activity;
-                listener.onAsciiEditorSave(asciiTransportItem);
+                SaveAsciiItem();
             }
         });
+    }
+
+    public void SaveAsciiItem() {
+        OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) this.getActivity();
+        listener.onAsciiEditorSave(this.asciiItem);
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-//        try {
-//            mListener = (OnFragmentInteractionListener) activity;
-//        } catch (ClassCastException e) {
-//            throw new ClassCastException(activity.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-
-
     }
 
     @Override
