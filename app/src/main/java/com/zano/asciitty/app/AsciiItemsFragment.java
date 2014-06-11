@@ -32,7 +32,7 @@ public class AsciiItemsFragment extends ListFragment implements SampleDataAdapte
             @Override
             public void onClick(View view) {
                 OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) view.getContext();
-                listener.onAsciiItemSelected(item);
+                listener.onAsciiItemEdit(item);
 
             }
         });

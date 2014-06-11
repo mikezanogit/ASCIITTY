@@ -26,6 +26,7 @@ public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterLi
     private ListView lv;
     private AsciiArtDataSource dataSource;
     private SampleDataAdapter sampleData;
+    List<AsciiArtItem> intialSet;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,8 +36,23 @@ public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterLi
 
     }
 
+    public void remove(AsciiArtItem item) {
+        this.sampleData.remove(item);
+    }
+
     public void update(AsciiArtItem item) {
-        this.sampleData.add(item);
+
+        int index = this.sampleData.indexOf(item);
+
+        if(index < 0) {
+            this.sampleData.add(item);
+        }
+        else {
+            this.sampleData.update(item, index);
+        }
+
+
+
     }
 
     @Override
@@ -55,12 +71,12 @@ public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterLi
             XmlResourceParser xrp = res.getXml(R.xml.sample_data);
 
             ArrayList<AsciiArtItem> items = parseXML(xrp);
-            List<AsciiArtItem> values = null;
+            intialSet = null;
 
             this.dataSource = new AsciiArtDataSource(this.getActivity());
             try {
                 this.dataSource.open();
-                values = this.dataSource.getAllAsciiArtItems();
+                intialSet = this.dataSource.getAllAsciiArtItems();
 
                 this.dataSource.close();
             }
@@ -68,7 +84,7 @@ public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterLi
 
             }
 
-            this.sampleData = new SampleDataAdapter(getActivity(), R.layout.fragment_ascii_item, (ArrayList<AsciiArtItem>) values);
+            this.sampleData = new SampleDataAdapter(getActivity(), R.layout.fragment_ascii_item, (ArrayList<AsciiArtItem>) intialSet);
             sampleData.setmListener(this);
             lv.setAdapter(sampleData);
 
@@ -92,9 +108,7 @@ public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterLi
         });
     }
 
-    public void CreateNewAsciiItem() {
 
-    }
 
     @Override
     public void OnItemClick(View view, final AsciiArtItem item) {
@@ -104,7 +118,17 @@ public class AsciiItemsFragment_ extends Fragment implements SampleDataAdapterLi
             @Override
             public void onClick(View view) {
                 OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) view.getContext();
-                listener.onAsciiItemSelected(item);
+                listener.onAsciiItemEdit(item);
+
+            }
+        });
+
+        Button delete = (Button) view.findViewById(R.id.buttonDelete);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) view.getContext();
+                listener.onAsciiItemDelete(item);
 
             }
         });

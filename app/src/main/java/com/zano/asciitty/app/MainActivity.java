@@ -76,10 +76,29 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
     }
 
     @Override
-    public void onAsciiItemSelected(AsciiArtItem item){
+    public void onAsciiItemEdit(AsciiArtItem item){
         mCurrentItem = item;
         this.ShowEditor(mCurrentItem);
     }
+
+    @Override
+    public void onAsciiItemDelete(AsciiArtItem item) {
+
+        this.dataSource = new AsciiArtDataSource(this);
+        try {
+            this.dataSource.open();
+            this.dataSource.deleteAsciiArtItem(item);
+            this.dataSource.close();
+
+            AsciiItemsFragment_ items = (AsciiItemsFragment_)
+                    this.getFragmentManager().findFragmentById(R.id.fragmentAsciiItems);
+
+            items.remove(item);
+
+        } catch (SQLException e) {
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

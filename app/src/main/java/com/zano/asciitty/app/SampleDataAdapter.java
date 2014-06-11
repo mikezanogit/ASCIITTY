@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by mamanzan on 5/21/2014.
@@ -17,6 +18,9 @@ import java.util.ArrayList;
 
 
 public class SampleDataAdapter extends ArrayAdapter<AsciiArtItem> {
+
+    List<AsciiArtItem> values;
+
     private Context context;
 
     public SampleDataAdapterListener getmListener() {
@@ -30,15 +34,38 @@ public class SampleDataAdapter extends ArrayAdapter<AsciiArtItem> {
     private SampleDataAdapterListener mListener;
 
 
+    @Override
+    public void add(AsciiArtItem object) {
+        //this.values.add(object);
+        super.add(object);
+    }
+
+    @Override
+    public void remove(AsciiArtItem object) {
+       //this.values.remove(object);
+        super.remove(object);
+    }
+
     public SampleDataAdapter(Context context, int layoutId, ArrayList<AsciiArtItem> items){
 
 
         super(context,layoutId,items);
-
+        //values now references items, its not a copy, thats why they both are updated.
+        this.values = items;
         this.context = context;
     }
 
+    public int indexOf(AsciiArtItem item)
+    {
+        int index = this.values.indexOf(item);
+        return index;
+    }
 
+    public void update(AsciiArtItem updated, int index) {
+
+        this.values.set(index, updated);
+        this.notifyDataSetChanged();
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -49,7 +76,8 @@ public class SampleDataAdapter extends ArrayAdapter<AsciiArtItem> {
             view = inflater.inflate(R.layout.fragment_ascii_item, parent, false);
         }
 
-        final AsciiArtItem item  = this.getItem(position);
+        //AsciiArtItem item  = this.getItem(position);
+        AsciiArtItem item = this.values.get(position);
         if(item != null){
             TextView itemView = (TextView) view.findViewById(R.id.textViewAsciiName);
             itemView.setText(item.getName());
