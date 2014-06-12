@@ -21,11 +21,11 @@ import java.util.List;
 /**
  * Created by mamanzan on 6/9/2014.
  */
-public class AsciiItemsFragment extends Fragment implements SampleDataAdapterListener{
+public class AsciiItemsFragment extends Fragment implements AsciiArtDataAdapterListener {
 
     private ListView lv;
-    private AsciiArtDataSource dataSource;
-    private SampleDataAdapter sampleData;
+    private AsciiArtDataRepository dataSource;
+    private AsciiArtDataAdapter sampleData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,7 @@ public class AsciiItemsFragment extends Fragment implements SampleDataAdapterLis
             ArrayList<AsciiArtItem> items = parseXML(xrp);
             List<AsciiArtItem> values = null;
 
-            this.dataSource = new AsciiArtDataSource(this.getActivity());
+            this.dataSource = new AsciiArtDataRepository(this.getActivity());
             try {
                 this.dataSource.open();
                 values = this.dataSource.getAllAsciiArtItems();
@@ -81,7 +81,7 @@ public class AsciiItemsFragment extends Fragment implements SampleDataAdapterLis
 
             }
 
-            this.sampleData = new SampleDataAdapter(getActivity(), R.layout.fragment_ascii_item, (ArrayList<AsciiArtItem>) values);
+            this.sampleData = new AsciiArtDataAdapter(getActivity(), R.layout.fragment_ascii_item, (ArrayList<AsciiArtItem>) values);
             sampleData.setmListener(this);
             lv.setAdapter(sampleData);
 

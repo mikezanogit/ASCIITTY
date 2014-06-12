@@ -16,9 +16,8 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
 
 
     private ViewFlipper mViewFlipper;
-    private Animation mSlideInLeft, mSlideOutRight;
     private AsciiArtItem mCurrentItem;
-    private AsciiArtDataSource mDataSource;
+    private AsciiArtDataRepository mDataSource;
 
     /**
      * This is one of the first methods called when the application starts.
@@ -33,13 +32,13 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
         setContentView(R.layout.activity_main);
 
         //Create the animations that will then be applied to the view flipper
-        mSlideInLeft = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
-        mSlideOutRight = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
+        Animation slideInLeft = AnimationUtils.loadAnimation(this, android.R.anim.slide_in_left);
+        Animation slideOutRight = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
 
         //Add animations to the view flipper
         mViewFlipper = (ViewFlipper) findViewById(R.id.viewFlipper);
-        mViewFlipper.setInAnimation(mSlideInLeft);
-        mViewFlipper.setOutAnimation(mSlideOutRight);
+        mViewFlipper.setInAnimation(slideInLeft);
+        mViewFlipper.setOutAnimation(slideOutRight);
     }
     /**
      * Returns the application to a state where the list of ascii art items are displayed.
@@ -55,7 +54,7 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
      */
     public void onAsciiEditorSave(AsciiArtItem item)
     {
-        mDataSource = new AsciiArtDataSource(this);
+        mDataSource = new AsciiArtDataRepository(this);
         try {
 
             mDataSource.open();
@@ -122,7 +121,7 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
     @Override
     public void onAsciiItemDelete(AsciiArtItem item){
         mCurrentItem = null;
-        mDataSource = new AsciiArtDataSource(this);
+        mDataSource = new AsciiArtDataRepository(this);
         try {
 
             mDataSource.open();

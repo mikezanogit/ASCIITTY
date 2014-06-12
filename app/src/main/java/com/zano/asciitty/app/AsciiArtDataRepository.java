@@ -13,13 +13,13 @@ import java.util.List;
 /**
  * Created by mamanzan on 6/4/2014.
  */
-public class AsciiArtDataSource {
+public class AsciiArtDataRepository {
 
     private SQLiteDatabase db;
     private SQLite dbHelper;
     private String[] allColumns = { SQLite.COLUMN_ID, SQLite.COLUMN_NAME, SQLite.COLUMN_DATA};
 
-    public AsciiArtDataSource(Context context) {
+    public AsciiArtDataRepository(Context context) {
         this.dbHelper = new SQLite(context);
     }
 

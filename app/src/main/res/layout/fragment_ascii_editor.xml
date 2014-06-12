@@ -18,8 +18,9 @@
         android:id="@+id/editTextName"
         android:background="#eee"
         android:layout_marginBottom="6dp"
-        android:text="@string/editTextDefaultName"
-        android:textColor="#000" />
+        android:textColor="#000"
+        android:hint="@string/editTextDefaultName"
+        android:layout_margin="4dp" />
 
     <EditText
         android:layout_width="fill_parent"
@@ -31,10 +32,11 @@
         android:background="#eee"
         android:typeface="monospace"
         android:clickable="true"
-        android:text="@string/editTextDefaultCreation"
         android:textColor="#000"
         android:gravity="top"
-        android:singleLine="false" />
+        android:singleLine="false"
+        android:hint="@string/editTextDefaultCreation"
+        android:layout_margin="4dp" />
 
     <LinearLayout
         android:orientation="horizontal"

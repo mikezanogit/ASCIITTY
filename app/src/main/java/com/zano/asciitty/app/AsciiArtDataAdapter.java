@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -17,21 +16,21 @@ import java.util.List;
  */
 
 
-public class SampleDataAdapter extends ArrayAdapter<AsciiArtItem> {
+public class AsciiArtDataAdapter extends ArrayAdapter<AsciiArtItem> {
 
     List<AsciiArtItem> values;
 
     private Context context;
 
-    public SampleDataAdapterListener getmListener() {
+    public AsciiArtDataAdapterListener getmListener() {
         return mListener;
     }
 
-    public void setmListener(SampleDataAdapterListener mListener) {
+    public void setmListener(AsciiArtDataAdapterListener mListener) {
         this.mListener = mListener;
     }
 
-    private SampleDataAdapterListener mListener;
+    private AsciiArtDataAdapterListener mListener;
 
 
     @Override
@@ -46,7 +45,7 @@ public class SampleDataAdapter extends ArrayAdapter<AsciiArtItem> {
         super.remove(object);
     }
 
-    public SampleDataAdapter(Context context, int layoutId, ArrayList<AsciiArtItem> items){
+    public AsciiArtDataAdapter(Context context, int layoutId, ArrayList<AsciiArtItem> items){
 
 
         super(context,layoutId,items);
@@ -55,10 +54,8 @@ public class SampleDataAdapter extends ArrayAdapter<AsciiArtItem> {
         this.context = context;
     }
 
-    public int indexOf(AsciiArtItem item)
-    {
-        int index = this.values.indexOf(item);
-        return index;
+    public int indexOf(AsciiArtItem item) {
+        return this.values.indexOf(item);
     }
 
     public void update(AsciiArtItem updated, int index) {
