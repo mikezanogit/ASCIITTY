@@ -1,12 +1,12 @@
 package com.zano.asciitty.app;
 
-import android.app.Activity;
-import android.app.ListFragment;
-import android.content.DialogInterface;
+import android.app.Fragment;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -14,18 +14,101 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Created by mamanzan on 5/21/2014.
+ * Created by mamanzan on 6/9/2014.
  */
-public class AsciiItemsFragment extends ListFragment implements SampleDataAdapterListener {
-
+public class AsciiItemsFragment extends Fragment implements SampleDataAdapterListener{
 
     private ListView lv;
+    private AsciiArtDataSource dataSource;
+    private SampleDataAdapter sampleData;
 
-    public void OnItemClick(View view, final AsciiArtItem item){
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+
+    }
+
+    public void remove(AsciiArtItem item) {
+        this.sampleData.remove(item);
+    }
+
+
+    public void update(AsciiArtItem item) {
+
+        int index = this.sampleData.indexOf(item);
+
+        if(index < 0) {
+            this.sampleData.add(item);
+        }
+        else {
+            this.sampleData.update(item, index);
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_ascii_items, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+
+        super.onActivityCreated(savedInstanceState);
+
+        this.lv = (ListView) this.getActivity().findViewById(R.id.listView);
+        try {
+            Resources res = getResources();
+            XmlResourceParser xrp = res.getXml(R.xml.sample_data);
+
+            ArrayList<AsciiArtItem> items = parseXML(xrp);
+            List<AsciiArtItem> values = null;
+
+            this.dataSource = new AsciiArtDataSource(this.getActivity());
+            try {
+                this.dataSource.open();
+                values = this.dataSource.getAllAsciiArtItems();
+
+                this.dataSource.close();
+            }
+            catch(SQLException e) {
+
+            }
+
+            this.sampleData = new SampleDataAdapter(getActivity(), R.layout.fragment_ascii_item, (ArrayList<AsciiArtItem>) values);
+            sampleData.setmListener(this);
+            lv.setAdapter(sampleData);
+
+            //shorthand supported on higher level of Java is catch (EX1 | EX2 e)
+        } catch (XmlPullParserException e) {
+
+        } catch (IOException e) {
+
+        }
+
+
+
+
+        Button add = (Button) this.getActivity().findViewById(R.id.buttonAdd);
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) view.getContext();
+                listener.onAsciiCreateNewItem();
+            }
+        });
+    }
+
+
+
+    @Override
+    public void OnItemClick(View view, final AsciiArtItem item) {
 
         Button edit = (Button) view.findViewById(R.id.buttonEdit);
         edit.setOnClickListener(new View.OnClickListener() {
@@ -36,55 +119,15 @@ public class AsciiItemsFragment extends ListFragment implements SampleDataAdapte
 
             }
         });
-    }
 
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-
-        OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) getActivity();
-        //listener.onAsciiItemSelected(position);
-        //super.onListItemClick(l, v, position, id);
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-
-        //Button edit = view.findViewById(R.id.buttonEdit);
-        super.onViewCreated(view, savedInstanceState);
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState)  {
-
-
-        super.onActivityCreated(savedInstanceState);
-
-        //XmlPullParserFactory parserFactory;
-        try {
-            Resources res = getResources();
-            XmlResourceParser xrp = res.getXml(R.xml.sample_data);
-
-//          parserFactory = XmlPullParserFactory.newInstance();
-//          XmlPullParser parser = parserFactory.newPullParser();
-//          InputStream in_s = getApplicationContext().getAssets().open("temp.xml");
-//          parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-//          parser.setInput(in_s, null);
-
-            ArrayList<AsciiArtItem> items = parseXML(xrp);
-            SampleDataAdapter sampleData = new SampleDataAdapter(getActivity(), R.layout.fragment_ascii_items, items);
-            sampleData.setmListener(this);
-            setListAdapter(sampleData);
-
-
-            //shorthand supported on higher level of Java is catch (EX1 | EX2 e)
-        } catch (XmlPullParserException e) {
-
-        } catch (IOException e) {
-
-        }
-
-
+        Button delete = (Button) view.findViewById(R.id.buttonDelete);
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) view.getContext();
+                listener.onAsciiItemDelete(item);
+            }
+        });
     }
 
     private ArrayList<AsciiArtItem> parseXML(XmlResourceParser parser) throws XmlPullParserException, IOException

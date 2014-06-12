@@ -1,15 +1,10 @@
 package com.zano.asciitty.app;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ViewFlipper;
@@ -20,46 +15,80 @@ import java.sql.SQLException;
 public class MainActivity extends Activity implements OnAsciiItemSelectionListener {
 
 
-    ViewFlipper viewFlipper;
-    Animation   slide_in_left, slide_out_right;
-    public AsciiArtItem mCurrentItem;
-    public AsciiArtDataSource dataSource;
+    private ViewFlipper mViewFlipper;
+    private Animation mSlideInLeft, mSlideOutRight;
+    private AsciiArtItem mCurrentItem;
+    private AsciiArtDataSource mDataSource;
 
-    public void onAsciiEditorCancel() {
-        viewFlipper.showPrevious();
+    /**
+     * This is one of the first methods called when the application starts.
+     * Define what layout to use and prepare some animations.
+     */
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        //When you create the main activity you need to set the layout to be used
+        setContentView(R.layout.activity_main);
+
+        //Create the animations that will then be applied to the view flipper
+        mSlideInLeft = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
+        mSlideOutRight = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
+
+        //Add animations to the view flipper
+        mViewFlipper = (ViewFlipper) findViewById(R.id.viewFlipper);
+        mViewFlipper.setInAnimation(mSlideInLeft);
+        mViewFlipper.setOutAnimation(mSlideOutRight);
     }
-
+    /**
+     * Returns the application to a state where the list of ascii art items are displayed.
+     * Called when the user is viewing the Editor and hits the "Cancel" button.
+     */
+    public void onAsciiEditorCancel() {
+        mViewFlipper.showPrevious();
+    }
+    /**
+     * Save the newly created or edited item to the sqlite database.
+     * Called when the user hits the "Save" button from the editor.
+     * @param item AsciiArtItem to be created or updated.
+     */
     public void onAsciiEditorSave(AsciiArtItem item)
     {
-
-
-        this.dataSource = new AsciiArtDataSource(this);
+        mDataSource = new AsciiArtDataSource(this);
         try {
-            this.dataSource.open();
+
+            mDataSource.open();
+            //Determine if this is an update or creation of an item.
             if (item.getId() != 0) {
-                this.dataSource.updateAsciiArtItem(item);
+                mCurrentItem = mDataSource.updateAsciiArtItem(item);
             }
             else{
-                item = this.dataSource.createAsciiArtItem(item.getName(), item.getData());
+                mCurrentItem =
+                        mDataSource.createAsciiArtItem(item.getName(), item.getData());
             }
+            mDataSource.close();
 
-            this.dataSource.close();
-
-            AsciiItemsFragment_ items = (AsciiItemsFragment_)
+            //Now that the item is saved update the listed items with the change.
+            AsciiItemsFragment items = (AsciiItemsFragment)
                     this.getFragmentManager().findFragmentById(R.id.fragmentAsciiItems);
+            items.update(mCurrentItem);
 
-            items.update(item);
 
         } catch (SQLException e) {
+            Log.e("SQl error", e.getMessage());
         }
 
-
-
-        viewFlipper.showPrevious();
+        //Since the save came from the editor page, switch back to the list of art items.
+        mViewFlipper.showPrevious();
     }
-
-
-    public void ShowEditor(AsciiArtItem item) {
+    /**
+     * Call the editor fragment and send in an item to be edited.  Bring the
+     * editor into view via an animation
+     *
+     * @param  item AsciiArtItem to be edited.
+     */
+    private void showEditor(AsciiArtItem item) {
         AsciiEditorFragment editor = (AsciiEditorFragment)
                 this.getFragmentManager().findFragmentById(R.id.fragmentAsciiEditor);
 
@@ -67,57 +96,48 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
         bundle.putParcelable(AsciiEditorFragment.ITEM, item);
         editor.setEditor(bundle);
 
-        viewFlipper.showNext();
+        mViewFlipper.showNext();
     }
-
+    /**
+     * Prepares the editor to be displayed with a blank slate for creation of a new item.
+     * Called when the user hits the "Add New" button.
+     */
     @Override
     public void onAsciiCreateNewItem() {
-        this.ShowEditor(null);
+        mCurrentItem = null;
+        this.showEditor(null);
     }
-
+    /**
+     * Prepare the editor to be displayed with a previously created item for editing.
+     * Called when the user hits the "Edit" button of an existing item.
+     *
+     * @param item AsciiArtItem to be edited.
+     */
     @Override
     public void onAsciiItemEdit(AsciiArtItem item){
         mCurrentItem = item;
-        this.ShowEditor(mCurrentItem);
+        this.showEditor(mCurrentItem);
     }
 
     @Override
-    public void onAsciiItemDelete(AsciiArtItem item) {
-
-        this.dataSource = new AsciiArtDataSource(this);
+    public void onAsciiItemDelete(AsciiArtItem item){
+        mCurrentItem = null;
+        mDataSource = new AsciiArtDataSource(this);
         try {
-            this.dataSource.open();
-            this.dataSource.deleteAsciiArtItem(item);
-            this.dataSource.close();
 
-            AsciiItemsFragment_ items = (AsciiItemsFragment_)
+            mDataSource.open();
+            mDataSource.deleteAsciiArtItem(item);
+            mDataSource.close();
+
+            //Now that the item is saved update the listed items with the change.
+            AsciiItemsFragment items = (AsciiItemsFragment)
                     this.getFragmentManager().findFragmentById(R.id.fragmentAsciiItems);
-
             items.remove(item);
 
+
         } catch (SQLException e) {
+            Log.e("SQl error", e.getMessage());
         }
-    }
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-//        if (savedInstanceState == null) {
-//            getFragmentManager().beginTransaction()
-//                    .add(R.id.container, new PlaceholderFragment())
-//                    .commit();
-//        }
-
-        viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipper);
-        slide_in_left = AnimationUtils.loadAnimation(this,android.R.anim.slide_in_left);
-        slide_out_right = AnimationUtils.loadAnimation(this,android.R.anim.slide_out_right);
-
-        viewFlipper.setInAnimation(slide_in_left);
-        viewFlipper.setOutAnimation(slide_out_right);
-
-
     }
 
 
@@ -139,20 +159,4 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
         }
         return super.onOptionsItemSelected(item);
     }
-
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-//    public static class PlaceholderFragment extends Fragment {
-//
-//        public PlaceholderFragment() {
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//            return rootView;
-//        }
-//    }
 }
