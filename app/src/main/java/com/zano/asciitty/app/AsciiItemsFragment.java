@@ -1,9 +1,9 @@
 package com.zano.asciitty.app;
 
 import android.app.Fragment;
-import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +21,10 @@ import java.util.List;
 /**
  * Created by mamanzan on 6/9/2014.
  */
-public class AsciiItemsFragment extends Fragment implements AsciiArtDataAdapterListener {
+public class AsciiItemsFragment extends Fragment implements IAsciiArtDataAdapterActions {
 
-    private ListView lv;
     private AsciiArtDataRepository dataSource;
-    private AsciiArtDataAdapter sampleData;
+    private AsciiArtDataAdapter asciiArtDataAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,19 +35,19 @@ public class AsciiItemsFragment extends Fragment implements AsciiArtDataAdapterL
     }
 
     public void remove(AsciiArtItem item) {
-        this.sampleData.remove(item);
+        this.asciiArtDataAdapter.remove(item);
     }
 
 
     public void update(AsciiArtItem item) {
 
-        int index = this.sampleData.indexOf(item);
+        int index = this.asciiArtDataAdapter.indexOf(item);
 
         if(index < 0) {
-            this.sampleData.add(item);
+            this.asciiArtDataAdapter.add(item);
         }
         else {
-            this.sampleData.update(item, index);
+            this.asciiArtDataAdapter.update(item, index);
         }
     }
 
@@ -62,37 +61,24 @@ public class AsciiItemsFragment extends Fragment implements AsciiArtDataAdapterL
 
         super.onActivityCreated(savedInstanceState);
 
-        this.lv = (ListView) this.getActivity().findViewById(R.id.listView);
+        List<AsciiArtItem> values = null;
+
+        this.dataSource = new AsciiArtDataRepository(this.getActivity());
         try {
-            Resources res = getResources();
-            XmlResourceParser xrp = res.getXml(R.xml.sample_data);
+            this.dataSource.open();
+            values = this.dataSource.getAllAsciiArtItems();
 
-            ArrayList<AsciiArtItem> items = parseXML(xrp);
-            List<AsciiArtItem> values = null;
-
-            this.dataSource = new AsciiArtDataRepository(this.getActivity());
-            try {
-                this.dataSource.open();
-                values = this.dataSource.getAllAsciiArtItems();
-
-                this.dataSource.close();
-            }
-            catch(SQLException e) {
-
-            }
-
-            this.sampleData = new AsciiArtDataAdapter(getActivity(), R.layout.fragment_ascii_item, (ArrayList<AsciiArtItem>) values);
-            sampleData.setmListener(this);
-            lv.setAdapter(sampleData);
-
-            //shorthand supported on higher level of Java is catch (EX1 | EX2 e)
-        } catch (XmlPullParserException e) {
-
-        } catch (IOException e) {
-
+            this.dataSource.close();
+        }
+        catch(SQLException e) {
+            Log.e("SQL error", e.getMessage());
         }
 
+        this.asciiArtDataAdapter = new AsciiArtDataAdapter(getActivity(), R.layout.fragment_ascii_item, (ArrayList<AsciiArtItem>) values);
+        asciiArtDataAdapter.setmDataAdapterActions(this);
 
+        ListView lv = (ListView) this.getActivity().findViewById(R.id.listView);
+        lv.setAdapter(asciiArtDataAdapter);
 
 
         Button add = (Button) this.getActivity().findViewById(R.id.buttonAdd);

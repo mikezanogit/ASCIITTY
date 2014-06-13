@@ -18,19 +18,18 @@ import java.util.List;
 
 public class AsciiArtDataAdapter extends ArrayAdapter<AsciiArtItem> {
 
-    List<AsciiArtItem> values;
-
+    private List<AsciiArtItem> values;
     private Context context;
+    private IAsciiArtDataAdapterActions mDataAdapterActions;
 
-    public AsciiArtDataAdapterListener getmListener() {
-        return mListener;
+    public IAsciiArtDataAdapterActions getmDataAdapterActions() {
+        return mDataAdapterActions;
     }
 
-    public void setmListener(AsciiArtDataAdapterListener mListener) {
-        this.mListener = mListener;
+    public void setmDataAdapterActions(IAsciiArtDataAdapterActions mListener) {
+        this.mDataAdapterActions = mListener;
     }
 
-    private AsciiArtDataAdapterListener mListener;
 
 
     @Override
@@ -80,17 +79,9 @@ public class AsciiArtDataAdapter extends ArrayAdapter<AsciiArtItem> {
             itemView.setText(item.getName());
         }
 
-        mListener.OnItemClick(view, item);
+        mDataAdapterActions.OnItemClick(view, item);
 
-//        Button edit = (Button) view.findViewById(R.id.buttonEdit);
-//        edit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) view.getContext();
-//                //listener.onAsciiItemSelected(item);
-//                //mListener.ItemClick();
-//            }
-//        });
+
 
         return view;
     }

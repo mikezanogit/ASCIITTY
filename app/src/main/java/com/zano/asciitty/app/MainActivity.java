@@ -12,7 +12,7 @@ import android.widget.ViewFlipper;
 import java.sql.SQLException;
 
 
-public class MainActivity extends Activity implements OnAsciiItemSelectionListener {
+public class MainActivity extends Activity implements IAsciiItemActions {
 
 
     private ViewFlipper mViewFlipper;
@@ -44,7 +44,7 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
      * Returns the application to a state where the list of ascii art items are displayed.
      * Called when the user is viewing the Editor and hits the "Cancel" button.
      */
-    public void onAsciiEditorCancel() {
+    public void cancelAsciiItem() {
         mViewFlipper.showPrevious();
     }
     /**
@@ -52,8 +52,7 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
      * Called when the user hits the "Save" button from the editor.
      * @param item AsciiArtItem to be created or updated.
      */
-    public void onAsciiEditorSave(AsciiArtItem item)
-    {
+    public void saveAsciiItem(AsciiArtItem item){
         mDataSource = new AsciiArtDataRepository(this);
         try {
 
@@ -102,7 +101,7 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
      * Called when the user hits the "Add New" button.
      */
     @Override
-    public void onAsciiCreateNewItem() {
+    public void createAsciiItem() {
         mCurrentItem = null;
         this.showEditor(null);
     }
@@ -113,13 +112,12 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
      * @param item AsciiArtItem to be edited.
      */
     @Override
-    public void onAsciiItemEdit(AsciiArtItem item){
+    public void editAsciiItem(AsciiArtItem item){
         mCurrentItem = item;
         this.showEditor(mCurrentItem);
     }
-
     @Override
-    public void onAsciiItemDelete(AsciiArtItem item){
+    public void deleteAsciiItem(AsciiArtItem item){
         mCurrentItem = null;
         mDataSource = new AsciiArtDataRepository(this);
         try {
@@ -138,15 +136,12 @@ public class MainActivity extends Activity implements OnAsciiItemSelectionListen
             Log.e("SQl error", e.getMessage());
         }
     }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
