@@ -23,39 +23,46 @@ import java.util.List;
  */
 public class AsciiItemsFragment extends Fragment implements IAsciiArtDataAdapterActions {
 
-    private AsciiArtDataRepository dataSource;
-    private AsciiArtDataAdapter asciiArtDataAdapter;
+    private AsciiArtDataAdapter mAsciiArtDataAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
     }
-
-    public void remove(AsciiArtItem item) {
-        this.asciiArtDataAdapter.remove(item);
-    }
-
-
-    public void update(AsciiArtItem item) {
-
-        int index = this.asciiArtDataAdapter.indexOf(item);
-
-        if(index < 0) {
-            this.asciiArtDataAdapter.add(item);
-        }
-        else {
-            this.asciiArtDataAdapter.update(item, index);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_ascii_items, container, false);
     }
+    /**
+     * Remove an item from the list.  Called after user taps the "Delete" buttom.
+     * @param item AsciiArtItem to be removed.
+     */
+    public void remove(AsciiArtItem item) {
+        this.mAsciiArtDataAdapter.remove(item);
+    }
+    /**
+     * Update the collection by either adding a new item to the displayed list
+     * or by actually updating an existing item
+     * @param item  AsciiArtItem to be updated.
+     */
+    public void update(AsciiArtItem item) {
 
+        int index = mAsciiArtDataAdapter.indexOf(item);
+
+        if(index < 0) { //Item doesn't exist.
+            mAsciiArtDataAdapter.add(item);
+        }
+        else { //Item exists.
+            mAsciiArtDataAdapter.update(item, index);
+        }
+    }
+
+
+    /**
+     * Starts up the fragment by accessing the SQLite database to pull the list
+     * of ascii art items to display.
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
 
@@ -63,30 +70,33 @@ public class AsciiItemsFragment extends Fragment implements IAsciiArtDataAdapter
 
         List<AsciiArtItem> values = null;
 
-        this.dataSource = new AsciiArtDataRepository(this.getActivity());
+        //Grab the ascii art items from the database.
         try {
-            this.dataSource.open();
-            values = this.dataSource.getAllAsciiArtItems();
-
-            this.dataSource.close();
+            AsciiArtDataRepository dataSource;
+            dataSource = new AsciiArtDataRepository(this.getActivity());
+            dataSource.open();
+            values = dataSource.getAllAsciiArtItems();
+            dataSource.close();
         }
         catch(SQLException e) {
             Log.e("SQL error", e.getMessage());
         }
 
-        this.asciiArtDataAdapter = new AsciiArtDataAdapter(getActivity(), R.layout.fragment_ascii_item, (ArrayList<AsciiArtItem>) values);
-        asciiArtDataAdapter.setmDataAdapterActions(this);
+        //Start up the adapter with the list of art items.
+        mAsciiArtDataAdapter = new AsciiArtDataAdapter(getActivity(), R.layout.fragment_ascii_item, (ArrayList<AsciiArtItem>) values);
+        mAsciiArtDataAdapter.setmDataAdapterActions(this);
 
-        ListView lv = (ListView) this.getActivity().findViewById(R.id.listView);
-        lv.setAdapter(asciiArtDataAdapter);
+        //Connect the view with data
+        ListView listView = (ListView) this.getActivity().findViewById(R.id.listView);
+        listView.setAdapter(mAsciiArtDataAdapter);
 
 
         Button add = (Button) this.getActivity().findViewById(R.id.buttonAdd);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) view.getContext();
-                listener.onAsciiCreateNewItem();
+                IAsciiItemActions actions = (IAsciiItemActions) view.getContext();
+                actions.createAsciiItem();
             }
         });
     }
@@ -100,8 +110,8 @@ public class AsciiItemsFragment extends Fragment implements IAsciiArtDataAdapter
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) view.getContext();
-                listener.onAsciiItemEdit(item);
+                IAsciiItemActions actions = (IAsciiItemActions) view.getContext();
+                actions.editAsciiItem(item);
 
             }
         });
@@ -110,8 +120,8 @@ public class AsciiItemsFragment extends Fragment implements IAsciiArtDataAdapter
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) view.getContext();
-                listener.onAsciiItemDelete(item);
+                IAsciiItemActions actions = (IAsciiItemActions) view.getContext();
+                actions.deleteAsciiItem(item);
             }
         });
     }

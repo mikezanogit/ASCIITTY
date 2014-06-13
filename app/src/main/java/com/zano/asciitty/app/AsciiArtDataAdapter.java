@@ -77,6 +77,9 @@ public class AsciiArtDataAdapter extends ArrayAdapter<AsciiArtItem> {
         if(item != null){
             TextView itemView = (TextView) view.findViewById(R.id.textViewAsciiName);
             itemView.setText(item.getName());
+
+            TextView itemViewData = (TextView) view.findViewById(R.id.textViewAsciiData);
+            itemViewData.setText(item.getData());
         }
 
         mDataAdapterActions.OnItemClick(view, item);

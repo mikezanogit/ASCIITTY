@@ -76,8 +76,8 @@ public class AsciiEditorFragment extends Fragment {
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) activity;
-                listener.onAsciiEditorCancel();
+                IAsciiItemActions actions = (IAsciiItemActions) activity;
+                actions.cancelAsciiItem();
             }
         });
 
@@ -104,8 +104,8 @@ public class AsciiEditorFragment extends Fragment {
         this.asciiItem.setData(tvData.getText().toString());
 
 
-        OnAsciiItemSelectionListener listener = (OnAsciiItemSelectionListener) main;
-        listener.onAsciiEditorSave(this.asciiItem);
+        IAsciiItemActions actions = (IAsciiItemActions) main;
+        actions.saveAsciiItem(this.asciiItem);
     }
 
     @Override
