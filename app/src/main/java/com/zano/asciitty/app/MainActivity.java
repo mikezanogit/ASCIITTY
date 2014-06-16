@@ -12,7 +12,7 @@ import android.widget.ViewFlipper;
 import java.sql.SQLException;
 
 
-public class MainActivity extends Activity implements IAsciiItemActions {
+public class MainActivity extends Activity implements IAsciiItemActions, IDeleteDialogActions {
 
 
     private ViewFlipper mViewFlipper;
@@ -118,23 +118,12 @@ public class MainActivity extends Activity implements IAsciiItemActions {
     }
     @Override
     public void deleteAsciiItem(AsciiArtItem item){
-        mCurrentItem = null;
-        mDataSource = new AsciiArtDataRepository(this);
-        try {
 
-            mDataSource.open();
-            mDataSource.deleteAsciiArtItem(item);
-            mDataSource.close();
+        mCurrentItem = item;
+        //This will create and bring up the dialog.
+        DeleteDialogFragment dialog = new DeleteDialogFragment();
+        dialog.show(getFragmentManager(), "DeleteDialogFragment" );
 
-            //Now that the item is saved update the listed items with the change.
-            AsciiItemsFragment items = (AsciiItemsFragment)
-                    this.getFragmentManager().findFragmentById(R.id.fragmentAsciiItems);
-            items.remove(item);
-
-
-        } catch (SQLException e) {
-            Log.e("SQl error", e.getMessage());
-        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -152,5 +141,31 @@ public class MainActivity extends Activity implements IAsciiItemActions {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void positiveDeleteClick() {
+
+        mDataSource = new AsciiArtDataRepository(this);
+        try {
+
+            mDataSource.open();
+            mDataSource.deleteAsciiArtItem(mCurrentItem);
+            mDataSource.close();
+
+        } catch (SQLException e) {
+            Log.e("SQl error", e.getMessage());
+        }
+
+        //Now that the item is deleted go back and upate the displayed list.
+        AsciiItemsFragment items = (AsciiItemsFragment)
+                this.getFragmentManager().findFragmentById(R.id.fragmentAsciiItems);
+        items.remove(mCurrentItem);
+        mCurrentItem = null;
+    }
+
+    @Override
+    public void negativeDeleteClick() {
+
     }
 }

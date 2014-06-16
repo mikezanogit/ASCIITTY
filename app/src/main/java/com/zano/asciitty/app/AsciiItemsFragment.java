@@ -1,5 +1,6 @@
 package com.zano.asciitty.app;
 
+import android.app.Dialog;
 import android.app.Fragment;
 import android.content.res.XmlResourceParser;
 import android.os.Bundle;
@@ -38,7 +39,7 @@ public class AsciiItemsFragment extends Fragment implements IAsciiArtDataAdapter
      * @param item AsciiArtItem to be removed.
      */
     public void remove(AsciiArtItem item) {
-        this.mAsciiArtDataAdapter.remove(item);
+        mAsciiArtDataAdapter.remove(item);
     }
     /**
      * Update the collection by either adding a new item to the displayed list
@@ -56,8 +57,6 @@ public class AsciiItemsFragment extends Fragment implements IAsciiArtDataAdapter
             mAsciiArtDataAdapter.update(item, index);
         }
     }
-
-
     /**
      * Starts up the fragment by accessing the SQLite database to pull the list
      * of ascii art items to display.
@@ -67,6 +66,10 @@ public class AsciiItemsFragment extends Fragment implements IAsciiArtDataAdapter
     public void onActivityCreated(Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
+
+        //Create Delete Dialog
+
+
 
         List<AsciiArtItem> values = null;
 

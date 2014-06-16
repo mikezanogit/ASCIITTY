@@ -13,5 +13,9 @@
     <string name="buttonAdd">Add New</string>
     <string name="editTextDefaultName">Enter a name</string>
     <string name="editTextDefaultCreation">Create your masterpiece here</string>
+    <string name="deleteMessage">Delete Art?</string>
+    <string name="dialogDelete">Delete</string>
+    <string name="dialogCancel">Cancel</string>
+    <string name="deleteTitle">Delete</string>
 
 </resources>
