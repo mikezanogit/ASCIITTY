@@ -25,7 +25,7 @@ public class SQLite extends SQLiteOpenHelper {
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_DATA = "data";
 
-    public static final String DATABASE_PATH = "/data/data/com/zano/asciitty/app/databases/";
+    public static final String DATABASE_PATH = "/data/data/com.zano.asciitty.app/databases/";
     private static final String DATABASE_NAME = "ascii_art.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -57,8 +57,9 @@ public class SQLite extends SQLiteOpenHelper {
      * Check if the database actually exists.
      * @return False when the database does not exist or if there is an error.
      */
-    private boolean checkDatabase() {
+    private boolean checkDatabase(boolean testin) {
 
+        boolean test = testin;
         SQLiteDatabase checkDB;
         try{
             String myPath = DATABASE_PATH + DATABASE_NAME;
@@ -81,7 +82,7 @@ public class SQLite extends SQLiteOpenHelper {
      * Create the database (if necessary)
      */
     public void createDatabase() {
-        boolean dbExist = checkDatabase();
+        boolean dbExist = this.checkDatabase(false);
 
         if(!dbExist){
             //By calling this method and empty database will be created into the default system path
