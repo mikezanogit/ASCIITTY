@@ -1,6 +1,7 @@
 package com.zano.asciitty.app;
 
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -45,7 +46,8 @@ public class SQLite extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(DATABASE_CREATE);
+
+        //sqLiteDatabase.execSQL(DATABASE_CREATE);
     }
 
     @Override
@@ -57,9 +59,8 @@ public class SQLite extends SQLiteOpenHelper {
      * Check if the database actually exists.
      * @return False when the database does not exist or if there is an error.
      */
-    private boolean checkDatabase(boolean testin) {
+    private SQLiteDatabase checkDatabase() {
 
-        boolean test = testin;
         SQLiteDatabase checkDB;
         try{
             String myPath = DATABASE_PATH + DATABASE_NAME;
@@ -68,30 +69,35 @@ public class SQLite extends SQLiteOpenHelper {
         }catch(SQLiteException e){
 
             //database does't exist yet.
-            return false;
+            //return false;
+            return null;
         }
 
         if(checkDB != null){
             checkDB.close();
         }
 
-        return checkDB != null ? true : false;
+        //return checkDB != null ? true : false;
+        return checkDB != null ? checkDB : null;
     }
 
     /**
      * Create the database (if necessary)
      */
-    public void createDatabase() {
-        boolean dbExist = this.checkDatabase(false);
+    public SQLiteDatabase createDatabase() {
+        //boolean dbExist = this.checkDatabase(false);
+        SQLiteDatabase instance = this.checkDatabase();
 
-        if(!dbExist){
+        if(instance == null){
             //By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
             this.getReadableDatabase();
 
+
             try {
 
                 copyDataBase();
+                instance = checkDatabase();
 
             } catch (IOException e) {
 
@@ -99,6 +105,8 @@ public class SQLite extends SQLiteOpenHelper {
 
             }
         }
+
+        return instance;
     }
     /**
      * Copies your database from your local assets-folder to the just created empty database in the
@@ -107,6 +115,10 @@ public class SQLite extends SQLiteOpenHelper {
      * */
     private void copyDataBase() throws IOException{
 
+        String dir = mContext.getApplicationInfo().dataDir + "/databases";
+
+
+        AssetManager am = mContext.getAssets();
         //Open your local db as the input stream
         InputStream myInput = mContext.getAssets().open(DATABASE_NAME);
 
