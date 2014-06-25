@@ -98,10 +98,8 @@ public class SQLite extends SQLiteOpenHelper {
             try {
 
                 copyDataBase();
-                //instance = checkDatabase();
-                //String myPath = DATABASE_PATH + DATABASE_NAME;
-                //instance = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
-
+                //very important to close the helper here
+                close();
 
             } catch (IOException e) {
 

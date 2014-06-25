@@ -17,5 +17,6 @@
     <string name="dialogDelete">Delete</string>
     <string name="dialogCancel">Cancel</string>
     <string name="deleteTitle">Delete</string>
+    <string name="fast_input_label">fast input</string>
 
 </resources>
