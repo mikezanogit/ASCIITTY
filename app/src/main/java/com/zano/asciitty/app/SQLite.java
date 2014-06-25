@@ -59,7 +59,7 @@ public class SQLite extends SQLiteOpenHelper {
      * Check if the database actually exists.
      * @return False when the database does not exist or if there is an error.
      */
-    private SQLiteDatabase checkDatabase() {
+    private boolean checkDatabase() {
 
         SQLiteDatabase checkDB;
         try{
@@ -69,26 +69,27 @@ public class SQLite extends SQLiteOpenHelper {
         }catch(SQLiteException e){
 
             //database does't exist yet.
-            //return false;
-            return null;
+            return false;
+            //return null;
         }
 
         if(checkDB != null){
             checkDB.close();
         }
 
-        //return checkDB != null ? true : false;
-        return checkDB != null ? checkDB : null;
+        return checkDB != null ? true : false;
+
     }
 
     /**
      * Create the database (if necessary)
      */
-    public SQLiteDatabase createDatabase() {
-        //boolean dbExist = this.checkDatabase(false);
-        SQLiteDatabase instance = this.checkDatabase();
+    public void createDatabase() {
+        boolean dbExist = this.checkDatabase();
+        //SQLiteDatabase instance = this.checkDatabase();
 
-        if(instance == null){
+        if(!dbExist){
+
             //By calling this method and empty database will be created into the default system path
             //of your application so we are gonna be able to overwrite that database with our database.
             this.getReadableDatabase();
@@ -97,7 +98,10 @@ public class SQLite extends SQLiteOpenHelper {
             try {
 
                 copyDataBase();
-                instance = checkDatabase();
+                //instance = checkDatabase();
+                //String myPath = DATABASE_PATH + DATABASE_NAME;
+                //instance = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
+
 
             } catch (IOException e) {
 
@@ -106,7 +110,8 @@ public class SQLite extends SQLiteOpenHelper {
             }
         }
 
-        return instance;
+        //return this.getWritableDatabase();
+        //return instance;
     }
     /**
      * Copies your database from your local assets-folder to the just created empty database in the

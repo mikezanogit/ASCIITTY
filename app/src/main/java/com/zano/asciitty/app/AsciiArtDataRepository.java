@@ -26,7 +26,9 @@ public class AsciiArtDataRepository {
     public void open() throws SQLException {
 
         dbHelper.createDatabase();
+        dbHelper.close();
         this.db = this.dbHelper.getWritableDatabase();
+       // this.db = dbHelper.createDatabase();
     }
 
     public void close() {
